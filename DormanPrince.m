@@ -23,7 +23,7 @@ function [X, Y] = DormanPrince(F, x_0, y_0, h, rightBorder, tol)
         Y_7 = Step (F, A,B7,C, h, x_0, y_0);
         
         x_0 = x_0 + h;
-        y_0 = Y_7';
+        y_0 = Y_7;
         
         %%%%Находим погрешность
         err = norm(abs(Y_7 - Y_6));
