@@ -2,10 +2,10 @@ function [Y_1] = Step(F, A, B, C, h, x_0, y_0 )
     rank = length(y_0);
     state = length(B);
     k = zeros(state, rank);
+    Y_1 = zeros(rank, 1);
  %%%% Высчитываем коэффициенты k %%%%%%%%%%%%%
-        for i=1:rank  %%% Находим k_1
-            k(1, i) = F{i}( x_0, y_0 );
-        end
+        %%% Находим k_1
+        k(1, :) = F( x_0, y_0 );
         for i=2:state %%% Находим оставшиеся k
             y_step = y_0;
             for j=1:rank 
@@ -13,9 +13,7 @@ function [Y_1] = Step(F, A, B, C, h, x_0, y_0 )
                     y_step(j) = y_step(j) + A(i, m) * k(m, j) * h;
                 end
             end
-            for j=1:rank
-                k(i,j) = F{j}( x_0 + h*C(i), y_step );
-            end
+            k(i,:) = F( x_0 + h*C(i), y_step );
         end
         for j=1:rank %%% Считаем новые Y
             sum = 0;

@@ -16,10 +16,6 @@ function [X,Y] = AutoStep_ERKMethod(F, state, x_0, y_0, h, rightBorder, tol)
             A = [0 0 0 0; 0.5 0 0 0; 0 0.5 0 0; 0 0 1 0];
             B = [1/6 1/3 1/3 1/6];
             C = [0 0.5 0.5 1];
-        case 6 
-            A = [0 0 0 0 0 0; 1/3 0 0 0 0 0; 4/25 6/25 0 0 0 0; 1/4 -3 15/4 0 0 0; 6/81 90/81 -50/81 8/81 0 0; 7/30 18/30 -5/30 4/30 0 0];
-            B = [48/192 0 125/192 0 -81/192 100/192];
-            C = [0 1/3 2/5 1 2/3 4/5];
     end
     
     %Определяем начальные условия
@@ -67,7 +63,7 @@ function [X,Y] = AutoStep_ERKMethod(F, state, x_0, y_0, h, rightBorder, tol)
         %2 условие, норм, но принимаем меньший шаг
         if (tol<r_n) && (r_n<=tol*2^p) 
             x_0 = x_0 + h;
-            y_0 = Y_1_halfStep';
+            y_0 = Y_1_halfStep;
 
             h = h_halfStep;
         end
@@ -75,22 +71,21 @@ function [X,Y] = AutoStep_ERKMethod(F, state, x_0, y_0, h, rightBorder, tol)
         %3 условие, супер, шаг оставляем
         if (tol*(1/2^(p+1))<=r_n) && (r_n<=tol)
             x_0 = x_0 + h;
-            y_0 = Y_1';
+            y_0 = Y_1;
         end
 
         %4 условие,очень точно, увеличиваем шаг
         if (r_n<tol*(1/(2^(p+1))))    
             x_0 = x_0 + h;
-            y_0 = Y_1';
+            y_0 = Y_1;
 
             h = h * 2;
         end
 
         X(v) = (x_0);
         Y = [Y, y_0];
-
+        
     end
-    
     
 end
 
