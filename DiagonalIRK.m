@@ -1,6 +1,5 @@
 function [X,Y] = DiagonalIRK(F, x_0, y_0, h, RightBorder)
 % Диагональный 2-х стадийный неявный метод
-
     gamma = (3+(3)^(1/2))/6;
     A = [gamma 0; 1-2*gamma gamma];
     B = [1/2 1/2];

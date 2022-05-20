@@ -1,6 +1,5 @@
 function [X,Y] = ImplicitHammerHollingsworth(F, x_0, y_0, h, RightBorder)
 % Неявный 2-х стадийный метод Хаммера-Холлингсуорта
-
     alfa = (3)^(1/2)/6;
     A = [1/4, 1/4-alfa; 1/4 + alfa, 1/4];
     B = [1/2, 1/2];

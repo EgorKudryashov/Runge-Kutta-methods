@@ -1,5 +1,4 @@
 function [X,Y] = ImplicitEuler(F, x_0, y_0, h, RightBorder)
-    
 % Неявный метод Эйлера
 %     A = 1;
 %     B = 1;
@@ -12,7 +11,6 @@ function [X,Y] = ImplicitEuler(F, x_0, y_0, h, RightBorder)
     
     while (x_0 < RightBorder)
         x_1 = x_0 + h;
-        %f = @(y) h*F(x_1,y) + y_0 - y;
         f = @(k) k - F(x_1,y_0+h*k);
         k = fsolve(f, F(x_0,y_0));
         y_1 = y_0 + h*k; 
