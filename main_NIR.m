@@ -56,7 +56,7 @@ tiledlayout(2,2);
 nexttile;
 plot (X, Y(1,:),'-o', x, f)
 title('h=0.5, Число шагов = 8')
-legend ('Метод Хойна', 'Точное решение')
+legend ('2-этапный метод', 'Точное решение')
 grid on
 xlabel('x')
 ylabel('y')
@@ -64,7 +64,7 @@ ylabel('y')
 nexttile
 plot (X2, Y2(1,:),'-o', x, f)
 title('h=0.1, Число шагов = 40')
-legend ('Метод Хойна', 'Точное решение')
+legend ('2-этапный метод', 'Точное решение')
 grid on
 xlabel('x')
 ylabel('y')
@@ -74,7 +74,7 @@ grid on
 nexttile;
 plot (Xs, Ys(1,:),'-o', x, f)
 title('h=0.5, Число шагов = 8')
-legend ('Метод Симпсона', 'Точное решение')
+legend ('3-этапный метод', 'Точное решение')
 grid on
 xlabel('x')
 ylabel('y')
@@ -82,14 +82,14 @@ ylabel('y')
 nexttile
 plot (X2s, Y2s(1,:),'-o', x, f)
 title('h=0.1, Число шагов = 40')
-legend ('Метод Симпсона', 'Точное решение')
+legend ('3-этапный метод', 'Точное решение')
 grid on
 xlabel('x')
 ylabel('y')
 hold on
 grid on
 
-%% Классический метод Рунге
+%% Классический метод Рунге-Кутты
 
 F = @(x,y) cos(x) - y;
 Realf = @(x) 1/2*(-exp(-x) + sin(x) + cos(x));
@@ -108,7 +108,7 @@ tiledlayout(2,1);
 nexttile;
 plot (X, Y(1,:),'-o', x, f)
 title('h= 1, Число шагов = 4')
-legend ('Метод Рунге', 'Точное решение')
+legend ('Метод Рунге-Кутты', 'Точное решение')
 grid on
 xlabel('x')
 ylabel('y')
@@ -134,8 +134,60 @@ plot (X, Y(2,:),'-o', x, f(2,:))
 plot (X, Y(3,:),'-o', x, f(3,:))
 plot (X, Y(4,:),'-o', x, f(4,:))
 title('h= 0.05, Число шагов = 80')
-legend ('Метод Рунге', 'Точное решение')
+legend ('Метод Рунге-Кутты', 'Точное решение')
 
 grid on
 xlabel('x')
 ylabel('y')
+
+%% График сравнения всех явных методов
+[X,Y] = ExplicitRungeKuttaMethod (F, 1, x_0, y_0, h/2, RightBorder);
+[X2,Y2] = ExplicitRungeKuttaMethod (F, 2, x_0, y_0, h, RightBorder);
+[X3,Y3] = ExplicitRungeKuttaMethod (F, 3, x_0, y_0, h, RightBorder);
+[X4,Y4] = ExplicitRungeKuttaMethod (F, 4, x_0, y_0, h*2, RightBorder);
+
+figure
+
+tiledlayout(2,2);
+
+
+nexttile;
+plot (X, Y(1,:),'-o', x, f)
+title('h = 0.25, Число шагов = 16')
+legend ('Метод 1-го порядка', 'Точное решение')
+grid on
+xlabel('x')
+ylabel('y')
+
+nexttile
+plot (X2, Y2(1,:),'-o', x, f)
+title('h = 0.5, Число шагов = 8')
+legend ('Метод 2-го порядка', 'Точное решение')
+grid on
+xlabel('x')
+ylabel('y')
+hold on
+grid on
+
+nexttile
+plot (X3, Y3(1,:),'-o', x, f)
+title('h = 0.5, Число шагов = 8')
+legend ('Метод 3-го порядка', 'Точное решение')
+grid on
+xlabel('x')
+ylabel('y')
+hold on
+grid on
+
+nexttile
+plot (X4, Y4(1,:),'-o', x, f)
+title('h = 1, Число шагов = 8')
+legend ('Метод 4-го порядка', 'Точное решение')
+grid on
+xlabel('x')
+ylabel('y')
+hold on
+grid on
+
+sgp = sgtitle (" Решение задачи: y' = cos(x) - y,  y(0) = 0 ", 'Color', 'black');
+sqp.FontSize = 24;
