@@ -1,7 +1,5 @@
 function res = Chebyshev1Diff(s, point)
     syms x;
-%     T_diff = (s * sin(s * acos(x)) / sqrt(-x^2+1));
-%     res = limit (T_diff, x, point);
     t_0 = 1;
     t_1 = x;
     T = x + 1;

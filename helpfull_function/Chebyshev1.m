@@ -13,6 +13,8 @@ function res = Chebyshev1(s,x)
             t_0 = t_1;
             t_1 = res;
         end
+    else
+        res = x;
     end
 
 end

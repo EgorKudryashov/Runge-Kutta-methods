@@ -17,7 +17,7 @@ function [X, Y] = RKC1(F, state, damp, x_0, y_0, h, rightBorder)
     k(1) = y_0;
     k(2) = y_0 + h * (omega_1 / omega_0) * F(x_0, k(1));
     for i=3:(state+1)
-        k(i) = 2*(T(i-1, omega_0) / T(i, omega_0)) * (h*omega_1*F(x_0, k(i-1)) + omega_0 * k(i-1))- (T(i-2, omega_0) / T(i, omega_0))* k(i-2);
+        k(i) = 2*(T(i-2, omega_0) / T(i-1, omega_0)) * (h*omega_1*F(x_0, k(i-1)) + omega_0 * k(i-1))- (T(i-3, omega_0) / T(i-1, omega_0))* k(i-2);
     end
     
     x_0 = x_0 + h;
