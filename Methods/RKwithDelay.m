@@ -32,19 +32,10 @@ function [X,Y] = RKwithDelay(F, x_0, y_0, z,Backstory, h, rightBorder, state, is
     k = zeros(state, rank);
     Y_1 = zeros(rank, 1);
     while (x_0 < rightBorder)
-        %%%
          for ii= 1:length(z)
              tii = x_0 - z(ii);
              Delay(:,ii) = interpolation(tii, t_0, h, Backstory, X, Y);
          end
-%         if (x_0 - z) < t_0
-%             Delay = Backstory(x_0 - z);
-%         else 
-%             ind = bin_search(x_0-z, X);
-%             theta = ((x_0-z) - X(ind)) / h;
-%             Delay = Y(:,ind) * (1-theta) + Y(:,ind+1)*theta;
-%         end
-        %%%
 %%%%%%%%%%% Высчитываем коэффициенты k %%%%%%%%%%%%%%
         k(1, :) = F(x_0, y_0, Delay);
         for i=2:state %%% Находим оставшиеся k
@@ -55,17 +46,6 @@ function [X,Y] = RKwithDelay(F, x_0, y_0, z,Backstory, h, rightBorder, state, is
                 end
             end
             %%%%
-%             for ii = 1:length(z)
-%                 tii = x_0+ h*C(i) - z(ii);
-%                 if (tii) < t_0
-%                     Delay(:,ii) = Backstory(x_0+ h*C(i) - z);
-%                 else 
-%                     ind = bin_search(tii, X);
-%                     theta = (tii - X(ind)) / h;
-%                     Delay(:,ii) = Y(:,ind) * (1-theta) + Y(:,ind+1)*theta;
-%                 end
-%             end
-           %%%%
             for ii= 1:length(z)
                tii = x_0 + h*C(i) - z(ii);
                Delay(:,ii) = interpolation(tii, t_0, h, Backstory, X, Y);
