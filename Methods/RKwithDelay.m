@@ -72,6 +72,7 @@ end
 
 function [A,B,C] = GreateRKCMethod (s, eta)
     A = zeros(s,s);
+    B = zeros(1,s);
     T = @(s, x) Chebyshev1(s,x);
     omega0 = 1 + eta/s^2;
      omega1 = Chebyshev1(s, omega0)/Chebyshev1Diff(s, omega0);
@@ -94,7 +95,6 @@ function [A,B,C] = GreateRKCMethod (s, eta)
     for j=(s - 1):-1:1
         B(j) = 2*T(s-1, omega0)*omega0*A(s, j)/ T(s, omega0) - T(s-2, omega0)*A(s - 1, j)/ T(s, omega0);
     end
-    sum(B)
 %     if (sum(B)<1)
 %         B(1)= B(1)+1-sum(B);
 %     end
