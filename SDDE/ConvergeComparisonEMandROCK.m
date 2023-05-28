@@ -12,10 +12,10 @@ Y_0 = 1;
 
 rightBorder = 1; N = 2^18; dt= rightBorder/N;
 
-setH = 8;
+setH = 5;
 line = zeros(1,setH);
 for p=1:setH
-   R(p) = 2^(setH+8-p);
+   R(p) = 2^(setH+10-p);
    line(p)= R(p)*dt;
    intervals(p) = ceil(N/R(p)) + 1;
 end
@@ -80,18 +80,23 @@ for exp=1:numExperiments
         Dt=R(p)*dt;
         L=ceil(N/R(p));
         
-        %%% ROCK solution
+%%%%%%%%%% ROCK solution
         v = 0; Trock = [];
         t_0 = T_0;
         y_0 = Y_0;
         rank = length(y_0);
         Yrock = zeros(rank, ceil(L));
-
+        
         v = v + 1;
         Trock(v) = t_0;
         Yrock(:,v) = y_0;
         k = zeros(1, rank);
         Y_1 = zeros(rank, 1);
+        
+        %%% Для ROCK_SDDE1 - закомментировать и заменить на Yrock в вызове
+        %%% интерполяции для delay в шуме
+        Fy = zeros(rank, ceil(L));
+        Fy(:,v) = y_0;
 
         while (t_0 < rightBorder)
             Winc = 0;
@@ -126,12 +131,14 @@ for exp=1:numExperiments
                  for i = 1:state
                     sumY = sumY + Dt*B(i)*k(i,j);
                  end
-                 Y_1(j) = y_0(j) + sumY; % y_1 = y_0+K*b*h И вообще надо транспонировать k
+                 Y_1(j) = y_0(j) + sumY;
              end
-
+            %%%
+            Fy(:,v+1)=Y_1;
+            %%%
              for ii= 1:length(delay)
                  tii = t_0 + Dt - delay(ii);
-                 Z(:,ii) = interpolation(tii, T_0, Dt, history, Trock, Yrock);
+                 Z(:,ii) = interpolation(tii, T_0, Dt, history, Trock, Fy);
              end
 
             Y_1 = Y_1 + G(t_0+Dt, Y_1, Z)*Winc;

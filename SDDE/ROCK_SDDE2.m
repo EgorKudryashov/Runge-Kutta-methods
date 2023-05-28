@@ -1,3 +1,13 @@
+%%% F - детерминистическая часть функции
+%%% G - стохастическая часть функции
+%%% h - величина постоянного шага
+%%% t_0 - начальное точка по времени
+%%% Y_0 - начальный вектор y
+%%% z - различные значения запаздываний в задаче
+%%% BackStory - функция предыстории
+%%% rightBorder - значение t, до которого идет вычисление от t_0
+%%% state - количество этапов ROCK-метода
+%%% damp - величина демпфирования ROCK-метода
 function [T, Y] = ROCK_SDDE2 (F, G, h, t_0, Y_0, z, BackStory, rightBorder, state, damp)
 %В этом методе для вычисления запаздывания в стохастической части используется 
 %значение функции без шума 
@@ -26,7 +36,7 @@ function [T, Y] = ROCK_SDDE2 (F, G, h, t_0, Y_0, z, BackStory, rightBorder, stat
                 
          for ii= 1:length(z)
              t_past = t_0 - z(ii);
-             Delay(:,ii) = interpolation(t_past, t_zero, h, BackStory, T, Fy);
+             Delay(:,ii) = interpolation(t_past, t_zero, h, BackStory, T, Y);
          end
 %%%%%%%%%%% Высчитываем коэффициент k %%%%%%%%%%%%%%
         k(1,:) = F(t_0, Y_0, Delay);
@@ -40,7 +50,7 @@ function [T, Y] = ROCK_SDDE2 (F, G, h, t_0, Y_0, z, BackStory, rightBorder, stat
             %%%%
             for ii= 1:length(z)
                tii = t_0 + h*C(i) - z(ii);
-               Delay(:,ii) = interpolation(tii, t_zero, h, BackStory, T, Fy);
+               Delay(:,ii) = interpolation(tii, t_zero, h, BackStory, T, Y);
             end
             k(i,:) = F( t_0 + h*C(i), y_step, Delay );
         end
